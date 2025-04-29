@@ -1,0 +1,33 @@
+<div>
+    <div class="bg-white border-b px-4 py-6">
+        <p class="text-lg font-bold">Chats</p>
+        <input class=" mt-4 w-full h-10 border rounded-xl border-gray-300 focus:outline-none focus:border-blue-500 px-2" type="text" placeholder="search" (keyup)="handleSearch($event)" />
+    </div>
+
+    @for (chats of displayConversations(); track chats._id){
+        <div class="flex items-center justify-center cursor-pointer h-16 -z-10 border-b-[1px] shadow-sm px-4" [class]="(selectedCurrentChat()?.conversationId === chats._id) ? 'bg-slate-200' : 'bg-white' " (click)="setCurrentChat(chats.participants, chats._id)">
+            <div class="flex items-center">
+                <ng-icon name="heroUserCircleSolid" size="2em"></ng-icon>
+            </div>
+            <div class="ml-4">
+                @for (item of chats.participants; track $index) {
+                    @if(item._id != user()?._id) {
+                        <p class="text-gray-700">{{ item.name }}</p>
+                    }
+                }
+
+                @if(chats.lastMessage) {
+                    <p class="text-gray-500 text-sm">{{chats.lastMessage.content}}</p>
+                    <!-- <span class="ml-2 text-xs">{{chats.lastMessage.timestamp | date:'short'}}</span> -->
+                }
+            </div>
+            <div class="ml-auto">
+            <!-- @if(chats.unreadCount) {
+                <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                    {{chats.unreadCount}}
+                </span>
+                } -->
+            </div>
+        </div>
+    }
+</div>

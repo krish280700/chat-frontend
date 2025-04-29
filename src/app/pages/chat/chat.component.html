@@ -1,0 +1,13 @@
+<div class="h-full">
+    <div class="grid grid-cols-5 h-full">
+        <div class="bg-gray-200 h-full  shadow-xl">
+            <app-conversations (selectedConversation)="selectedConversation($event)"></app-conversations>
+        </div>
+        <div  class=" col-span-3 h-full relative shadow-xl">
+            <app-messages [currentChatId]="currentChatId()" [currentChatPerson]="currentChat()"></app-messages>
+        </div>
+        <div class="bg-gray-200 h-full shadow-xl">
+            <app-users></app-users>
+        </div>
+    </div>
+</div>

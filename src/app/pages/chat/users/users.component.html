@@ -1,0 +1,18 @@
+<div>
+    <div class="bg-white border-b px-4 py-6">
+        <p class="text-lg font-bold">Users</p>
+    </div>
+    @for (userItem of users(); track userItem._id){
+        <div class="flex items-center justify-center h-16 -z-10  bg-white border-b-[1px] shadow-sm px-4">
+            <div class="flex items-center">
+                <ng-icon name="heroUserCircleSolid" size="2em"></ng-icon>
+            </div>
+            <div class="ml-4">
+                <p class="text-gray-700">{{ userItem.name }}</p>
+            </div>
+            <div class="ml-auto cursor-pointer" (click)="addUserToChat(userItem._id.toString())">
+                <ng-icon name="heroUserPlus" size="1.5em" color="blue"></ng-icon>
+            </div>
+        </div>
+    }
+</div>
