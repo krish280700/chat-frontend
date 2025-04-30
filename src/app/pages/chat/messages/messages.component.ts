@@ -35,9 +35,11 @@ export class MessagesComponent {
 	messages = signal<messages[]>([]);
 	isFetching = signal<Boolean>(true);
 	user = signal<User | undefined>(undefined)
-	
+	emoji = signal<any>({})
+	allEmoji = signal<any[]>([])
     currentChatPerson = input<User | undefined>(undefined) 
 	currentChatId = input<string | undefined>('')
+	isEmojiPanelOpen = signal<Boolean>(false)
 
 	private destroyRef = inject(DestroyRef);
 	private messagesService = inject(MessagesService);
@@ -52,7 +54,11 @@ export class MessagesComponent {
 		this.user.set(this.authService.user())
 
 		const userId = this.authService.user()?._id;
-	  
+		this.messagesService.loadEmoji().subscribe({
+			next: (emojis) => {
+				this.emoji.set(emojis[0]);
+			}
+		});
 		// Set up listener ONCE
 		this.socketService.onMessage((msg) => {
 		  this.messages.set([...this.messages(), msg]); // Update signal or state here
@@ -116,6 +122,27 @@ export class MessagesComponent {
 				  console.error("Message failed to send:", ack.error);
 				}
 			});
+		}
+	}
+
+	loadALLEmojis() {
+		this.messagesService.loadAllEmojis().subscribe({
+			next: (emojis) => {
+				this.allEmoji.set(emojis);
+				this.isEmojiPanelOpen.set(true);
+			}
+		});
+	}
+
+	closeEmojiPanel() {
+		this.isEmojiPanelOpen.set(false);
+	}
+
+	handleEmojiClick(emoji: any) {
+		const input = this.input.nativeElement.querySelector('input');
+		if (input) {
+			input.value += emoji; // Append the emoji to the input value
+			this.isEmojiPanelOpen.set(false); // Close the emoji panel after selection
 		}
 	}
 }

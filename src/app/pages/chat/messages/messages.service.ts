@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -25,6 +25,11 @@ type MessageReq = {
   content: string;
   chatId: string;
 }
+
+const headers = new HttpHeaders({
+  'X-Api-Key': environment.emoji_access_key
+});
+
 @Injectable({
   providedIn: 'root'
 })
@@ -39,6 +44,32 @@ export class MessagesService {
 
     }
     return throwError(() => new Error("ID is required to load messages"));
+  }
+
+  loadEmoji(){
+    return this.httpClient.get<any>(`https://api.api-ninjas.com/v1/emoji?name=slightly smiling face`, {headers}).pipe(
+      map((resData) => {
+        console.log('Emoji fetched successfully:', resData);
+        return resData
+      }),
+      catchError((error) => {
+        console.error('Error fetching emojis:', error);
+        return throwError(() => new Error("Failed to fetch")); // Return an empty array on error
+      })		  
+    )
+  }
+
+  loadAllEmojis(){
+    return this.httpClient.get<any>(`https://api.api-ninjas.com/v1/emoji?group=smileys_emotion`, {headers}).pipe(
+      map((resData) => {
+        console.log('Emoji fetched successfully:', resData);
+        return resData
+      }),
+      catchError((error) => {
+        console.error('Error fetching emojis:', error);
+        return throwError(() => new Error("Failed to fetch")); // Return an empty array on error
+      })		  
+    )
   }
 
   sendMessage(message: MessageReq) {

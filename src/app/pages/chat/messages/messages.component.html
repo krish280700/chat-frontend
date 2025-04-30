@@ -20,9 +20,26 @@
         }
     </div>
     <div class=" border px-5 py-10 bg-white shadow-sm flex items-center justify-between absolute bottom-[74px] w-full" #chatInput>
+
         <form #form="ngForm" (ngSubmit)="handleSendMessage(form)" class="flex items-center w-full">
+            <span class="mr-1 cursor-pointer" (click)="loadALLEmojis()">{{this.emoji().character}}</span>
             <input type="text" placeholder="Write your Message here...." name="messageContent" ngModel class="w-full h-10 border rounded-xl border-gray-300 focus:outline-none focus:border-blue-500 px-2" />
             <button><ng-icon name="heroArrowRightCircleSolid" class="ml-3" size="2em" color="blue"></ng-icon></button>
         </form>
+
+        @if(this.isEmojiPanelOpen()){
+            <div class="absolute bottom-[70px] right-0 bg-white shadow-sm border border-gray-300 rounded-lg p-2 w-[300px] z-10">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-gray-700">Emoji</h3>
+                    <span (click)="closeEmojiPanel()" class="cursor-pointer">x</span>
+                </div>
+                <div class="grid grid-cols-4 gap-2">
+                    @for(emoji of allEmoji(); track emoji.character){
+                        <span (click)="handleEmojiClick(emoji.character)" class="cursor-pointer">{{emoji.character}}</span>
+                    }
+                </div>
+            </div>
+        }
     </div>
+
 </div>
